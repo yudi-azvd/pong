@@ -3,4 +3,4 @@
 <img src=".github/screenshot.png" width="400">
 
 
-![screenshot de pong](.github/screenshot.png)
+[Inspiração](https://www.youtube.com/watch?v=fiShX2pTz9A)
