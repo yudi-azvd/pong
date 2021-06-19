@@ -10,7 +10,7 @@
 
 int main() {
   Game game;
-  sf::RenderWindow window(sf::VideoMode(game.windowWidth, game.windowHeight), "Pong");
+  sf::RenderWindow window;
   Renderer renderer(&window, &game);
   sf::SoundBuffer buffer;
   sf::Sound sound;
@@ -26,30 +26,25 @@ int main() {
 
   while (window.isOpen()) {
     sf::Event event;
-
     while (window.pollEvent(event)) {
-      
-      switch (event.type) {
-      case sf::Event::Closed:
+      if (event.type == sf::Event::Closed)
         window.close();
-        break;
-      default:
-        break;
-      }
-
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        game.movePlayer({1, true});
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        game.movePlayer({1, false});
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-        game.movePlayer({2, true});
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-        game.movePlayer({2, false});
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-        game.start();
     }
 
-    game.moveBall();
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+      game.start();
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+      game.movePlayer({1, true});
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+      game.movePlayer({1, false});
+      
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+      game.movePlayer({2, true});
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+      game.movePlayer({2, false});
+
+    game.update();
     renderer.render();
   }
 

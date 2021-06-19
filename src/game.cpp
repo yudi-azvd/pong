@@ -21,6 +21,12 @@ Game::Game() {
 Game::~Game() {}
 
 
+void Game::update() {
+  // ball.move();
+  moveBall();
+}
+
+
 void Game::start() {
   ball.canMove = true;
 }
@@ -42,6 +48,25 @@ void Game::movePlayer(MovePlayerCommand command) {
 
   player.y += direction*playerStep;
 }
+
+
+void Game::setPlayerMovement(int playerId, float dy) {
+  Player& player = playerId == 1 ? player1 : player2;
+  int direction = dy < 0 ? -1 : 1;
+
+  bool isAlmostTouchingCeiling = player.y-player.height/2 <= playerStep;
+  if (isAlmostTouchingCeiling && direction < 0) {
+    return;
+  }
+
+  bool isAlmostTouchingFloor = std::abs(player.y+player.height/2 - windowHeight) <= playerStep;
+  if (isAlmostTouchingFloor && direction > 0) {
+    return;
+  }
+
+  player.y += direction*playerStep;
+}
+
 
 
 void Game::moveBall() {

@@ -15,6 +15,8 @@
 
 class Game {
 public:
+  std::string title = "Pong";
+  
   float windowHeight = 560;
   
   float windowWidth = 720;
@@ -29,20 +31,20 @@ public:
 
   ~Game();
 
+  void update();
+
   void start();
 
   void movePlayer(MovePlayerCommand command);
+  
+  void setPlayerMovement(int playerId, float dy);
 
   void moveBall();
 
 private:
   const float sideOffset = 40;
 
-  float playerStep = 4.0;
-
-  // std::default_random_engine randGenerator;
-
-  // std::uniform_real_distribution<float>() directionDistribuition();
+  float playerStep = 0.5;
 };
 
 

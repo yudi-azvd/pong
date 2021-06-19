@@ -5,9 +5,13 @@ Renderer::Renderer(sf::RenderWindow* w, Game* g) {
   window = w;
   game = g;
 
+  window->create(sf::VideoMode(
+    g->windowWidth, g->windowHeight), g->title);
+
   circle.setRadius(g->ball.radius);
   circle.setOrigin(g->ball.radius, g->ball.radius);
   circle.setFillColor(sf::Color::White);
+  
   rectangle.setFillColor(sf::Color::White);
   rectangle.setOrigin(g->player1.width/2, g->player1.height/2);
   rectangle.setSize({g->player1.width, g->player1.height});
