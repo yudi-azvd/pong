@@ -10,7 +10,7 @@
 
 #include "player.h"
 #include "ball.h"
-#include "moveplayercommand.h"
+#include "command.h"
 
 
 class Game {
@@ -37,8 +37,6 @@ public:
 
   void movePlayer(MovePlayerCommand command);
   
-  void setPlayerMovement(int playerId, float dy);
-
   void moveBall();
 
 private:

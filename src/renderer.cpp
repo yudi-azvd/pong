@@ -5,8 +5,10 @@ Renderer::Renderer(sf::RenderWindow* w, Game* g) {
   window = w;
   game = g;
 
-  window->create(sf::VideoMode(
-    g->windowWidth, g->windowHeight), g->title);
+  window->create(sf::VideoMode
+    (g->windowWidth, g->windowHeight), 
+    g->title,
+    sf::Style::Close);
 
   circle.setRadius(g->ball.radius);
   circle.setOrigin(g->ball.radius, g->ball.radius);
