@@ -2,12 +2,13 @@
 
 <img src=".github/screenshot.png" width="400">
 
+[Inspiração](https://www.youtube.com/watch?v=fiShX2pTz9A)
+
 
 ## Notas de apendizado
 O movimento não é suave por que estava dentro de
 `while (window.pollEvent(event))`. Depois de colocado pra fora
 funcinou melhor
-
 
 
 ```cpp
@@ -46,3 +47,4 @@ if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
   game.movePlayer({2, false});
   
 ```
+
