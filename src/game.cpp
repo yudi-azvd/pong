@@ -9,6 +9,7 @@ Game::Game(sf::RenderWindow* w) {
     sf::VideoMode(windowWidth, windowHeight), 
     title, 
     sf::Style::Close | sf::Style::Titlebar);
+  window->setFramerateLimit(60);
 
   ball.setDirection(randomDirectionForBall());
   ball.y = windowHeight/2;
@@ -32,6 +33,10 @@ void Game::update() {
   ball.update();
   player1.update();
   player2.update();
+
+  std::printf("player %d at (%3d, %3d)\n", player1.id, (int) player1.x, (int) player1.y);
+  std::printf("player %d at (%3d, %3d)\n", player2.id, (int) player2.x, (int) player2.y);
+  // std::printf("player %d at (%3d, %3d)\x1b[A\r", player2.id, (int) player2.x, (int) player2.y);
 }
 
 
@@ -66,21 +71,31 @@ void Game::moveBall() {
     return;
 
   float rad = ball.direction/180*M_PI;
-  float xStep = cos(rad)*ball.step;
-  float yStep = sin(rad)*ball.step;
+  float dx = cos(rad)*ball.step;
+  float dy = sin(rad)*ball.step;
+  float ballMinDistance = 6;
 
-  bool isAlmostTouchingCeiling = ball.y-ball.radius/2 <= ball.step;
-  if (isAlmostTouchingCeiling && yStep < 0) {
+  bool isAlmostTouchingCeiling = ball.y-ball.radius/2 <= ballMinDistance;
+  if (isAlmostTouchingCeiling && dy < 0) {
+    // ball.bounce()
     return;
   }
 
-  bool isAlmostTouchingRightSide = windowWidth - (ball.x+ball.radius/2) <= ball.step;
-  if (isAlmostTouchingRightSide && xStep > 0) {
+  bool isAlmostTouchingFloor = windowHeight - (ball.y+ballMinDistance/2) <= ballMinDistance;
+  if (isAlmostTouchingFloor && dy > 0) {
+    // ball.bounce()
     return;
   }
 
-  bool isAlmostTouchingLeftSide = ball.x-ball.radius/2 <= ball.step;
-  if (isAlmostTouchingLeftSide && xStep < 0) {
+  bool isAlmostTouchingRightWall = windowWidth - (ball.x+ballMinDistance/2) <= ballMinDistance;
+  if (isAlmostTouchingRightWall && dx > 0) {
+    // ball.bounce()
+    return;
+  }
+
+  bool isAlmostTouchingLeftWall = ball.x-ballMinDistance/2 <= ballMinDistance;
+  if (isAlmostTouchingLeftWall && dx < 0) {
+    // ball.bounce()
     return;
   }
 
@@ -94,12 +109,15 @@ void Game::render() {
   player2.render(window);
   ball.render(window);
   window->display();
+  // std::system("clear"); // consome muito tempo
+  std::printf("game render DT = %.1lf \n", 1/LastFrameClock::restart().asSeconds());
 }
 
 
 float Game::randomDirectionForBall() {
   float initialDirection = rand() % 2 ? 0 : 180;
   initialDirection = rand() % 360;
+  initialDirection = 180;
   return initialDirection;
 }
 

@@ -4,11 +4,13 @@
 #include <math.h>
 #include <SFML/Graphics.hpp>
 
+#include "lastframeclock.h"
+
 
 class Ball {
 public:
   float radius = 10;
-  float step = 0.25;
+  float step = 700;
   float x;
   float y;
   float direction; // Em graus

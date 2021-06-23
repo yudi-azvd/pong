@@ -20,10 +20,14 @@ void Ball::setDirection(float dir) {
 void Ball::move() {
   if (!canMove)
     return;
-  
+
+  double dt = LastFrameClock::getDeltaTime();
   directionInRadians = direction*degreesToRadians;
-  x += step*cos(directionInRadians);
-  y += step*sin(directionInRadians);
+  // float lastDisp = sqrt(x*x + x*x);
+  x += step*cos(directionInRadians)*dt;
+  y += step*sin(directionInRadians)*dt;
+  // float newDisp = sqrt(x*x + x*x);
+  // std::printf("ball last ");
 }
 
 

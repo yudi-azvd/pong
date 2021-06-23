@@ -2,8 +2,11 @@
 #define PLAYER_H_INCLUDED
 
 #include <cstdint>
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+
+#include "lastframeclock.h"
 
 
 class Player {
@@ -14,6 +17,10 @@ public:
   const float height = 90;
   float x;
   float y;
+  float step = 120.0;
+
+  sf::Font font;
+  sf::Text text;
 
   Player();
   
