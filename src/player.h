@@ -4,6 +4,7 @@
 #include <cstdint>
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 
 
 class Player {
@@ -19,9 +20,10 @@ public:
   
   ~Player();
 
-  void render();
+  void render(sf::RenderWindow* window);
 
 private:
+  sf::RectangleShape rectangle;
 
 };
 

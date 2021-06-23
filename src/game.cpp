@@ -1,7 +1,14 @@
 #include "game.h"
 
-Game::Game() {
+
+Game::Game(sf::RenderWindow* w) {
   srand(time(NULL));
+
+  window = w;
+  window->create(
+    sf::VideoMode(windowWidth, windowHeight), 
+    title, 
+    sf::Style::Close | sf::Style::Titlebar);
 
   float initialDirection = rand() % 2 ? 0 : 180;
   ball.direction = initialDirection;
@@ -76,4 +83,13 @@ void Game::moveBall() {
 
   ball.x += xStep;
   ball.y += yStep;
+}
+
+
+void Game::render() {
+  window->clear();
+  player1.render(window);
+  player2.render(window);
+  ball.render(window);
+  window->display();
 }

@@ -5,22 +5,11 @@
 #include <SFML/Graphics.hpp>
 
 #include "game.h"
-#include "renderer.h"
 
 
 int main() {
-  Game game;
   sf::RenderWindow window;
-  Renderer renderer(&window, &game);
-  sf::SoundBuffer buffer;
-  sf::Sound sound;
-  // std::string wallHitSoundPath = 
-  if (!buffer.loadFromFile("../sounds/wall-hit.wav")) {
-    return 0;
-  }
-
-  sound.setBuffer(buffer);
-  sound.play();
+  Game game(&window);
 
   char c;
 
@@ -45,7 +34,7 @@ int main() {
       game.movePlayer({"", 2, false});
 
     game.update();
-    renderer.render();
+    game.render();
   }
 
   return 0;
