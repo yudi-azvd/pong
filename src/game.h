@@ -5,9 +5,9 @@
 #include <math.h>
 #include <time.h>
 #include <stdlib.h>
-
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+
 
 #include "player.h"
 #include "ball.h"
@@ -36,8 +36,8 @@ public:
 
   void update();
 
-  void start();
-
+  void restartBall();
+  
   void movePlayer(MovePlayerCommand command);
   
   void moveBall();
@@ -48,6 +48,8 @@ private:
   const float sideOffset = 40;
 
   float playerStep = 0.5;
+
+  float randomDirectionForBall();
 };
 
 

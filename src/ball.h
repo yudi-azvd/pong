@@ -1,23 +1,26 @@
 #ifndef BALL_H_INCLUDED
 #define BALL_H_INCLUDED
 
-#include <iostream>
-
+#include <math.h>
 #include <SFML/Graphics.hpp>
 
 
 class Ball {
 public:
   float radius = 10;
+  float step = 0.25;
   float x;
   float y;
-  float direction;
+  float direction; // Em graus
+  float directionInRadians;
+  const float degreesToRadians = M_PI/180;
   bool canMove = false;
-  float step = 0.25;
 
   Ball();
 
   ~Ball();
+
+  void setDirection(float direction);
 
   void update();
 

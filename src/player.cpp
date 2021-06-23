@@ -11,8 +11,18 @@ Player::Player() {
 Player::~Player() {}
 
 
-void Player::render(sf::RenderWindow* w) {
-  // set positoin deveria estar em update()
+void Player::move(float dy) {
+  y += dy;
+}
+
+
+
+void Player::update() {
+  // é assim mesmo?
   rectangle.setPosition(x, y);
+}
+
+
+void Player::render(sf::RenderWindow* w) {
   w->draw(rectangle);
 }

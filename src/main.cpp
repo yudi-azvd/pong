@@ -1,6 +1,4 @@
 #include <iostream>
-// #include <filesystem>
-
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 
@@ -18,10 +16,12 @@ int main() {
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed)
         window.close();
+      if (event.type == sf::Event::KeyReleased) {
+        if (event.key.code == sf::Keyboard::Space) {
+          game.restartBall();
+        }
+      }
     }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-      game.start();
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
       game.movePlayer({"", 1, true});

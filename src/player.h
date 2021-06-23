@@ -2,7 +2,6 @@
 #define PLAYER_H_INCLUDED
 
 #include <cstdint>
-
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
@@ -20,11 +19,14 @@ public:
   
   ~Player();
 
+  void move(float dy);
+
+  void update();
+
   void render(sf::RenderWindow* window);
 
 private:
   sf::RectangleShape rectangle;
-
 };
 
 

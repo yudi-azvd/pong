@@ -10,8 +10,7 @@ Game::Game(sf::RenderWindow* w) {
     title, 
     sf::Style::Close | sf::Style::Titlebar);
 
-  float initialDirection = rand() % 2 ? 0 : 180;
-  ball.direction = initialDirection;
+  ball.setDirection(randomDirectionForBall());
   ball.y = windowHeight/2;
   ball.x = windowWidth/2;
 
@@ -29,12 +28,17 @@ Game::~Game() {}
 
 
 void Game::update() {
-  // ball.move();
   moveBall();
+  ball.update();
+  player1.update();
+  player2.update();
 }
 
 
-void Game::start() {
+void Game::restartBall() {
+  ball.setDirection(randomDirectionForBall());
+  ball.y = windowHeight/2;
+  ball.x = windowWidth/2;
   ball.canMove = true;
 }
 
@@ -53,12 +57,11 @@ void Game::movePlayer(MovePlayerCommand command) {
     return;
   }
 
-  player.y += direction*playerStep;
+  player.move(direction*playerStep);
 }
 
 
 void Game::moveBall() {
-  ball.move();
   if (!ball.canMove)
     return;
 
@@ -81,8 +84,7 @@ void Game::moveBall() {
     return;
   }
 
-  ball.x += xStep;
-  ball.y += yStep;
+  ball.move();
 }
 
 
@@ -93,3 +95,11 @@ void Game::render() {
   ball.render(window);
   window->display();
 }
+
+
+float Game::randomDirectionForBall() {
+  float initialDirection = rand() % 2 ? 0 : 180;
+  initialDirection = rand() % 360;
+  return initialDirection;
+}
+
