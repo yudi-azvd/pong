@@ -32,6 +32,6 @@ void Ball::update() {
 }
 
 
-void Ball::render(sf::RenderWindow* window) {
-  window->draw(circle);
+void Ball::render(sf::RenderTarget* target) {
+  target->draw(circle);
 }

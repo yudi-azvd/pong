@@ -16,13 +16,12 @@ void Player::move(float dy) {
 }
 
 
-
 void Player::update() {
   // é assim mesmo?
   rectangle.setPosition(x, y);
 }
 
 
-void Player::render(sf::RenderWindow* w) {
-  w->draw(rectangle);
+void Player::render(sf::RenderTarget* target) {
+  target->draw(rectangle);
 }

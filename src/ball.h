@@ -26,7 +26,7 @@ public:
 
   void move();
 
-  void render(sf::RenderWindow* window);
+  void render(sf::RenderTarget* target);
 
 private:
   sf::CircleShape circle;

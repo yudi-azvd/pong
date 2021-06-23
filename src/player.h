@@ -23,7 +23,7 @@ public:
 
   void update();
 
-  void render(sf::RenderWindow* window);
+  void render(sf::RenderTarget* target);
 
 private:
   sf::RectangleShape rectangle;
