@@ -49,7 +49,7 @@ public:
 private:
   const float sideOffset = 40;
 
-  float playerStep = 0.5;
+  float playerStep = 1;
 
   float randomDirectionForBall();
 };

@@ -15,7 +15,7 @@ Player::~Player() {}
 
 void Player::move(float dy) {
   double dt = LastFrameClock::getDeltaTime();
-  y += step*dy*dt;
+  y += stepsPerSecond*dy*dt;
 }
 
 

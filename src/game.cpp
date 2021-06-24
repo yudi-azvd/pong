@@ -52,13 +52,18 @@ void Game::movePlayer(MovePlayerCommand command) {
   Player& player = command.playerId == 1 ? player1 : player2;
   int direction = command.upDirection ? -1 : 1;
 
-  bool isAlmostTouchingCeiling = player.y-player.height/2 <= playerStep;
+  // acho que não funciona por que o passo do player é muito grande
+  float playerMinDistance = 10.0;
+
+  bool isAlmostTouchingCeiling = player.y-player.height/2 <= playerMinDistance;
   if (isAlmostTouchingCeiling && command.upDirection) {
     return;
   }
 
-  bool isAlmostTouchingFloor = std::abs(player.y+player.height/2 - windowHeight) <= playerStep;
+  bool isAlmostTouchingFloor = windowHeight - (player.y+player.height/2) <= playerMinDistance;
   if (isAlmostTouchingFloor && !command.upDirection) {
+    // std::printf("player%d top %.2f\n", player.id, player.y+player.height/2);
+    // std::printf("player%d distance: %.2f\n", player.id, windowHeight - (player.y+player.height/2));
     return;
   }
 
@@ -71,8 +76,8 @@ void Game::moveBall() {
     return;
 
   float rad = ball.direction/180*M_PI;
-  float dx = cos(rad)*ball.step;
-  float dy = sin(rad)*ball.step;
+  float dx = cos(rad)*ball.stepsPerSecond;
+  float dy = sin(rad)*ball.stepsPerSecond;
   float ballMinDistance = 6;
 
   bool isAlmostTouchingCeiling = ball.y-ball.radius/2 <= ballMinDistance;
@@ -110,14 +115,15 @@ void Game::render() {
   ball.render(window);
   window->display();
   // std::system("clear"); // consome muito tempo
-  std::printf("game render DT = %.1lf \n", 1/LastFrameClock::restart().asSeconds());
+  // std::printf("Game::render FPS = %.1lf \n", 1/LastFrameClock::restart().asSeconds());
+  LastFrameClock::restart();
 }
 
 
 float Game::randomDirectionForBall() {
   float initialDirection = rand() % 2 ? 0 : 180;
   initialDirection = rand() % 360;
-  initialDirection = 180;
+  // initialDirection = 180;
   return initialDirection;
 }
 

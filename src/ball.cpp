@@ -23,12 +23,33 @@ void Ball::move() {
 
   double dt = LastFrameClock::getDeltaTime();
   directionInRadians = direction*degreesToRadians;
-  // float lastDisp = sqrt(x*x + x*x);
-  x += step*cos(directionInRadians)*dt;
-  y += step*sin(directionInRadians)*dt;
-  // float newDisp = sqrt(x*x + x*x);
-  // std::printf("ball last ");
+  x += stepsPerSecond*cos(directionInRadians)*dt;
+  y += stepsPerSecond*sin(directionInRadians)*dt;
 }
+
+
+void Ball::bounce() {
+  directionInRadians = direction*degreesToRadians;
+  float xComponent = cos(directionInRadians);
+  float yComponent = sin(directionInRadians);
+  // é possível 
+
+  auto direction = getMainDirection(xComponent, yComponent);
+
+  if (direction.down || direction.up) {
+    // ySpeed = -ySpeed
+  }
+  else if (direction.left || direction.right) {
+    // xSpeed = -xSpeed
+  }
+}
+
+
+Ball::MainDirection Ball::getMainDirection(float xComponent, float yComponent) {
+  MainDirection direction;
+  return direction;
+}
+
 
 
 void Ball::update() {
