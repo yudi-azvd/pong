@@ -34,8 +34,8 @@ void Game::update() {
   player1.update();
   player2.update();
 
-  std::printf("player %d at (%3d, %3d)\n", player1.id, (int) player1.x, (int) player1.y);
-  std::printf("player %d at (%3d, %3d)\n", player2.id, (int) player2.x, (int) player2.y);
+  // std::printf("player %d at (%3d, %3d)\n", player1.id, (int) player1.x, (int) player1.y);
+  // std::printf("player %d at (%3d, %3d)\n", player2.id, (int) player2.x, (int) player2.y);
   // std::printf("player %d at (%3d, %3d)\x1b[A\r", player2.id, (int) player2.x, (int) player2.y);
 }
 
@@ -82,25 +82,25 @@ void Game::moveBall() {
 
   bool isAlmostTouchingCeiling = ball.y-ball.radius/2 <= ballMinDistance;
   if (isAlmostTouchingCeiling && dy < 0) {
-    // ball.bounce()
+    ball.bounce("down");
     return;
   }
 
   bool isAlmostTouchingFloor = windowHeight - (ball.y+ballMinDistance/2) <= ballMinDistance;
   if (isAlmostTouchingFloor && dy > 0) {
-    // ball.bounce()
+    ball.bounce("up");
     return;
   }
 
   bool isAlmostTouchingRightWall = windowWidth - (ball.x+ballMinDistance/2) <= ballMinDistance;
   if (isAlmostTouchingRightWall && dx > 0) {
-    // ball.bounce()
+    ball.bounce("left");
     return;
   }
 
   bool isAlmostTouchingLeftWall = ball.x-ballMinDistance/2 <= ballMinDistance;
   if (isAlmostTouchingLeftWall && dx < 0) {
-    // ball.bounce()
+    ball.bounce("right");
     return;
   }
 

@@ -28,28 +28,19 @@ void Ball::move() {
 }
 
 
-void Ball::bounce() {
+void Ball::bounce(std::string newDirection) {
   directionInRadians = direction*degreesToRadians;
-  float xComponent = cos(directionInRadians);
-  float yComponent = sin(directionInRadians);
-  // é possível 
+  float xMagnitude = cos(directionInRadians);
+  float yMagnitude = sin(directionInRadians);
 
-  auto direction = getMainDirection(xComponent, yComponent);
-
-  if (direction.down || direction.up) {
-    // ySpeed = -ySpeed
+  if (newDirection == "up" || newDirection == "down") // vertical
+    yMagnitude = -yMagnitude;
+  else { // horizontal
+    xMagnitude = -xMagnitude;
   }
-  else if (direction.left || direction.right) {
-    // xSpeed = -xSpeed
-  }
+
+  this->direction = atan2(yMagnitude, xMagnitude)*radiansToDegrees;
 }
-
-
-Ball::MainDirection Ball::getMainDirection(float xComponent, float yComponent) {
-  MainDirection direction;
-  return direction;
-}
-
 
 
 void Ball::update() {

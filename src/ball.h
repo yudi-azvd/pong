@@ -10,12 +10,13 @@
 class Ball {
 public:
   float radius = 10;
-  float stepsPerSecond = 360;
+  float stepsPerSecond = 3*360;
   float x;
   float y;
   float direction; // Em graus
   float directionInRadians;
   const float degreesToRadians = M_PI/180;
+  const float radiansToDegrees = 180/M_PI;
   bool canMove = false;
 
   Ball();
@@ -28,21 +29,12 @@ public:
 
   void move();
 
-  void bounce();
+  void bounce(std::string newDirection);
 
   void render(sf::RenderTarget* target);
 
 private:
   sf::CircleShape circle;
-
-  struct MainDirection {
-    bool up;
-    bool left;
-    bool down;
-    bool right;
-  };
-
-  MainDirection getMainDirection(float xComponent, float yComponent);
 };
 
 
