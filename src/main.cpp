@@ -8,18 +8,15 @@
 int main() {
   sf::RenderWindow window;
   Game game(&window);
-  sf::CircleShape testCircle;
-
-  testCircle.setRadius(10);
-  testCircle.setFillColor(sf::Color::Green);
-  testCircle.setOrigin(10, 10);
-  char c;
 
   sf::Event event;
-  while (window.isOpen()) {
+  // while (window.isOpen()) {
+  while (game.isRunning()) {
+    // std::printf("game is running %d\n", game.isRunning());
     while (window.pollEvent(event)) {
-      if (event.type == sf::Event::Closed)
-        window.close();
+      if (event.type == sf::Event::Closed) {
+        game.end();
+      }
       if (event.type == sf::Event::KeyReleased) {
         if (event.key.code == sf::Keyboard::Space) {
           game.restartBall();

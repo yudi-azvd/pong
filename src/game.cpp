@@ -4,31 +4,44 @@
 Game::Game(sf::RenderWindow* w) {
   srand(time(NULL));
 
-  window = w;
-  window->create(
-    sf::VideoMode(windowWidth, windowHeight), 
-    title, 
-    sf::Style::Close | sf::Style::Titlebar);
-  window->setFramerateLimit(60);
+  clockForBallReset = sf::Clock(); // colocar dentro de initClocks()?
 
-  ball.setDirection(randomDirectionForBall());
-  ball.y = windowHeight/2;
-  ball.x = windowWidth/2;
-
-  player1.id = 1;
-  player1.x = sideOffset;
-  player1.y = windowHeight/2;
-
-  player2.id = 2;
-  player2.x = windowWidth - sideOffset;
-  player2.y = windowHeight/2;
+  initSounds();
+  initWindow(w);
+  initScore();
+  initBall();
+  initPlayers();
 }
 
 
 Game::~Game() {}
 
 
+bool Game::isRunning() {
+  return !aPlayerReachedMaxScore || gameEnded;
+}
+
+
+void Game::end() {
+  gameEnded = true;
+}
+
+
 void Game::update() {
+  if (!isRunning()) {
+    window->close();
+    return;
+  }
+  
+  if (player1Score == maxScore || player2Score == maxScore) {
+    aPlayerReachedMaxScore = true; 
+    // present winner
+    // push key to restart
+    // push another key to quit game
+  }
+
+
+  ball.canMove = clockForBallReset.getElapsedTime().asSeconds() > 1;
   moveBall();
   ball.update();
   player1.update();
@@ -38,7 +51,7 @@ void Game::update() {
 
 void Game::restartBall() {
   ball.setDirection(randomDirectionForBall());
-  ball.y = windowHeight/2;
+  ball.y = (rand() % ((int) windowHeight-40)) + 20; // [20, windowHeight-20)
   ball.x = windowWidth/2;
   ball.canMove = true;
 }
@@ -78,36 +91,46 @@ void Game::moveBall() {
 
   bool isAlmostTouchingCeiling = ball.y-ball.radius/2 <= ballMinDistance;
   if (isAlmostTouchingCeiling && dy < 0) {
+    sound.setBuffer(wallHitSoundBuffer); sound.play();
     ball.bounce("down");
     return;
   }
 
   bool isAlmostTouchingFloor = windowHeight - (ball.y+ballMinDistance/2) <= ballMinDistance;
   if (isAlmostTouchingFloor && dy > 0) {
+    sound.setBuffer(wallHitSoundBuffer); sound.play();
     ball.bounce("up");
     return;
   }
 
   bool isAlmostTouchingRightWall = windowWidth - (ball.x+ballMinDistance/2) <= ballMinDistance;
   if (isAlmostTouchingRightWall && dx > 0) {
-    // player 1 ganha ponto
+    // TODO: esperar 2 segundos pra começar uma nova rodada
+    clockForBallReset.restart();
+    // TODO: reset ball
+    ++player1Score;
     ball.bounce("left");
     return;
   }
 
   bool isAlmostTouchingLeftWall = ball.x-ballMinDistance/2 <= ballMinDistance;
   if (isAlmostTouchingLeftWall && dx < 0) {
+    // TODO: esperar 2 segundos pra começar uma nova rodada
+    clockForBallReset.restart();
+    // TODO: reset ball
+    ++player2Score;
     ball.bounce("right");
-    // player 2 ganha ponto
     return;
   }
 
-  // No futuro, a nova direção da bola depende de onde ela tocou no jogador.
+  // TODO: a nova direção da boladeve depender de onde ela tocou no jogador.
   if (ball.isTouchingPlayer(player1.x, player1.y, player1.width, player1.height)) {
+    sound.setBuffer(playerHitSoundBuffer); sound.play();
     ball.bounce("right"); // ball.bounce("vertical")?
   }
 
   if (ball.isTouchingPlayer(player2.x, player2.y, player2.width, player2.height)) {
+    sound.setBuffer(playerHitSoundBuffer); sound.play();
     ball.bounce("left"); // tanto faz direita ou esquerda
   }
 
@@ -149,3 +172,43 @@ float Game::randomDirectionForBall() {
   return randomDirection + toTheLeftOrToTheRightOffset;
 }
 
+
+void Game::initSounds() {
+  if (!wallHitSoundBuffer.loadFromFile("../rsc/wall-hit.wav"))
+    throw std::runtime_error("could not load file: wall-hit.wav");
+  if (!playerHitSoundBuffer.loadFromFile("../rsc/player-hit.wav"))
+    throw std::runtime_error("could not load file: wall-hit.wav");
+}
+
+
+void Game::initWindow(sf::RenderWindow* w) {
+  window = w;
+  window->create(
+    sf::VideoMode(windowWidth, windowHeight), 
+    title, 
+    sf::Style::Close | sf::Style::Titlebar);
+  window->setFramerateLimit(60);
+}
+
+
+void Game::initScore() {
+  resetScore();
+  scoreboard = Scoreboard(&player1Score, &player2Score);
+}
+
+
+void Game::initBall() {
+  ball.setDirection(randomDirectionForBall());
+  restartBall();
+}
+
+
+void Game::initPlayers() {
+  player1.id = 1;
+  player1.x = sideOffset;
+  player1.y = windowHeight/2;
+
+  player2.id = 2;
+  player2.x = windowWidth - sideOffset;
+  player2.y = windowHeight/2;
+}
