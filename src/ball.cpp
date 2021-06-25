@@ -43,6 +43,18 @@ void Ball::bounce(std::string newDirection) {
 }
 
 
+/**
+ * Esse método de determinar só funciona se a bola sabe que o player é um retângulo :(
+ */
+bool Ball::isTouchingPlayer(float px, float py, float pwidth, float pheight) {
+  float horizontalCentersDistance = std::abs(px-x);
+  float verticalCentersDistance = std::abs(py-y);
+  bool areTouchingHorizontally = radius + pwidth/2 >= horizontalCentersDistance; 
+  bool areTouchingVertically = radius + pheight/2 >= verticalCentersDistance;
+  return areTouchingHorizontally && areTouchingVertically;
+}
+
+
 void Ball::update() {
   circle.setPosition(x, y);
 }

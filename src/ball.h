@@ -10,7 +10,7 @@
 class Ball {
 public:
   float radius = 10;
-  float stepsPerSecond = 3*360;
+  float stepsPerSecond = 2*360;
   float x;
   float y;
   float direction; // Em graus
@@ -28,6 +28,8 @@ public:
   void update();
 
   void move();
+
+  bool isTouchingPlayer(float x, float y, float width, float height);
 
   void bounce(std::string newDirection);
 

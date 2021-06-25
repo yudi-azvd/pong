@@ -44,6 +44,8 @@ public:
   
   void moveBall();
   
+  void moveBallWithMouse(float x, float y);
+  
   void render();
 
 private:

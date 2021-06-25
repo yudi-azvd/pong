@@ -8,7 +8,11 @@
 int main() {
   sf::RenderWindow window;
   Game game(&window);
+  sf::CircleShape testCircle;
 
+  testCircle.setRadius(10);
+  testCircle.setFillColor(sf::Color::Green);
+  testCircle.setOrigin(10, 10);
   char c;
 
   sf::Event event;

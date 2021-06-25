@@ -33,10 +33,6 @@ void Game::update() {
   ball.update();
   player1.update();
   player2.update();
-
-  // std::printf("player %d at (%3d, %3d)\n", player1.id, (int) player1.x, (int) player1.y);
-  // std::printf("player %d at (%3d, %3d)\n", player2.id, (int) player2.x, (int) player2.y);
-  // std::printf("player %d at (%3d, %3d)\x1b[A\r", player2.id, (int) player2.x, (int) player2.y);
 }
 
 
@@ -78,7 +74,7 @@ void Game::moveBall() {
   float rad = ball.direction/180*M_PI;
   float dx = cos(rad)*ball.stepsPerSecond;
   float dy = sin(rad)*ball.stepsPerSecond;
-  float ballMinDistance = 6;
+  float ballMinDistance = 5;
 
   bool isAlmostTouchingCeiling = ball.y-ball.radius/2 <= ballMinDistance;
   if (isAlmostTouchingCeiling && dy < 0) {
@@ -94,6 +90,7 @@ void Game::moveBall() {
 
   bool isAlmostTouchingRightWall = windowWidth - (ball.x+ballMinDistance/2) <= ballMinDistance;
   if (isAlmostTouchingRightWall && dx > 0) {
+    // player 1 ganha ponto
     ball.bounce("left");
     return;
   }
@@ -101,10 +98,37 @@ void Game::moveBall() {
   bool isAlmostTouchingLeftWall = ball.x-ballMinDistance/2 <= ballMinDistance;
   if (isAlmostTouchingLeftWall && dx < 0) {
     ball.bounce("right");
+    // player 2 ganha ponto
     return;
   }
 
+  // No futuro, a nova direção da bola depende de onde ela tocou no jogador.
+  if (ball.isTouchingPlayer(player1.x, player1.y, player1.width, player1.height)) {
+    ball.bounce("right"); // ball.bounce("vertical")?
+  }
+
+  if (ball.isTouchingPlayer(player2.x, player2.y, player2.width, player2.height)) {
+    ball.bounce("left"); // tanto faz direita ou esquerda
+  }
+
   ball.move();
+}
+
+
+void Game::moveBallWithMouse(float x, float y) {
+  if (ball.isTouchingPlayer(player1.x, player1.y, player1.width, player1.height)) {
+    ball.bounce("right"); // ball.bounce("vertical")?
+    return;
+  }
+
+  if (ball.isTouchingPlayer(player2.x, player2.y, player2.width, player2.height)) {
+    std::printf(" bunce player 2 \n");
+    ball.bounce("left"); // ball.bounce("vertical")?
+    return;
+  }
+
+  ball.x = x;
+  ball.y = y;
 }
 
 
@@ -114,16 +138,17 @@ void Game::render() {
   player2.render(window);
   ball.render(window);
   window->display();
-  // std::system("clear"); // consome muito tempo
-  // std::printf("Game::render FPS = %.1lf \n", 1/LastFrameClock::restart().asSeconds());
   LastFrameClock::restart();
 }
 
 
 float Game::randomDirectionForBall() {
   float initialDirection = rand() % 2 ? 0 : 180;
+  initialDirection = 0;
+  initialDirection = 180;
+  initialDirection = 90;
+  initialDirection = 270;
   initialDirection = rand() % 360;
-  // initialDirection = 180;
   return initialDirection;
 }
 

@@ -17,7 +17,7 @@ public:
   const float height = 90;
   float x;
   float y;
-  float stepsPerSecond = 1200.0;
+  float stepsPerSecond = 800.0;
 
   sf::Font font;
   sf::Text text;
