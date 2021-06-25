@@ -143,10 +143,9 @@ void Game::render() {
 
 
 float Game::randomDirectionForBall() {
-  float horizontalDirectionOffset = rand() % 2 ? 0. : 180.;
+  float toTheLeftOrToTheRightOffset = rand() % 2 ? 0. : 180.;
   int amplitude = 35;
-  float randomDirectionRange = (rand() % (2*amplitude)) - amplitude; // [-amp, amp)
-  std::printf("direction %.0f\n", randomDirectionRange);
-  return randomDirectionRange + horizontalDirectionOffset;
+  float randomDirection = (rand() % (2*amplitude)) - amplitude; // [-amp, amp)
+  return randomDirection + toTheLeftOrToTheRightOffset;
 }
 
