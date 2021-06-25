@@ -29,8 +29,6 @@ public:
 
   void move();
 
-  bool isTouchingPlayer(float x, float y, float width, float height);
-
   void bounce(std::string newDirection);
 
   void render(sf::RenderTarget* target);

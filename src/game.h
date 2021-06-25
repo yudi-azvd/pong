@@ -58,9 +58,10 @@ private:
 
   sf::SoundBuffer wallHitSoundBuffer;
   sf::SoundBuffer playerHitSoundBuffer;
+  sf::SoundBuffer loseSoundBuffer;
   sf::Sound sound;
 
-  sf::Clock clockForBallReset;
+  sf::Clock timerForBallToRestart;
 
   /**
    * Estados:
@@ -77,9 +78,9 @@ private:
 
   const float sideOffset = 40;
 
-  float playerStep = 1;
-
   float randomDirectionForBall();
+
+  bool isBallTouchingPlayer(uint8_t playerId);
 
   void resetScore() {
     player1Score = 0;

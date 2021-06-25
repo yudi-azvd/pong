@@ -10,9 +10,7 @@ int main() {
   Game game(&window);
 
   sf::Event event;
-  // while (window.isOpen()) {
   while (game.isRunning()) {
-    // std::printf("game is running %d\n", game.isRunning());
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed) {
         game.end();
