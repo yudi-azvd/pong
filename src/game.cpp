@@ -53,7 +53,6 @@ void Game::update() {
 
 
 void Game::restartBall() {
-  std::printf("restar ballllll %.2f\n", timerForBallToRestart.getElapsedTime().asSeconds());
   ball.setDirection(randomDirectionForBall());
   ball.y = (rand() % ((int) windowHeight-40)) + 20; // [20, windowHeight-20)
   ball.x = windowWidth/2;
@@ -90,6 +89,7 @@ void Game::moveBall() {
 
   bool isAlmostTouchingRightWall = windowWidth - (ball.x+ballMinDistance/2) <= ballMinDistance;
   if (isAlmostTouchingRightWall && dx > 0) {
+    sound.setBuffer(loseSoundBuffer); sound.play();
     timerForBallToRestart.restart();
     sound.setBuffer(loseSoundBuffer); sound.play();
     ball.canMove = false;
@@ -100,6 +100,7 @@ void Game::moveBall() {
 
   bool isAlmostTouchingLeftWall = ball.x-ballMinDistance/2 <= ballMinDistance;
   if (isAlmostTouchingLeftWall && dx < 0) {
+    sound.setBuffer(loseSoundBuffer); sound.play();
     timerForBallToRestart.restart();
     ball.canMove = false;
     ++player2Score;
