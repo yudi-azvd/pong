@@ -18,7 +18,7 @@ Scoreboard::~Scoreboard() {
 
 void Scoreboard::update() {
   std::string placeholder = std::to_string(*player1Points)
-   + "\t\t\t" + std::to_string(*player2Points);
+   + seprationBetweenPlayerPoints + std::to_string(*player2Points);
   text->setString(placeholder);
   text->setPosition(x, y);
 }
@@ -53,6 +53,3 @@ void Scoreboard::initText() {
     text->getLocalBounds().height/4,
   });
 }
-
-
-

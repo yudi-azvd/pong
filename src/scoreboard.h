@@ -18,6 +18,11 @@ public:
     return "score: " + std::to_string(*player1Points) + " x " + std::to_string(*player2Points);
   }
 
+  void reset() {
+    *player1Points = 0;
+    *player2Points = 0;
+  }
+
   void setPosition(float x, float y);
 
   void setSize(float w, float h) {
@@ -39,6 +44,8 @@ private:
   sf::Text* text;
   sf::Font font;
   sf::RectangleShape rect;
+
+  const std::string seprationBetweenPlayerPoints = "\t\t\t";
 
   void initFonts();
   void initText();

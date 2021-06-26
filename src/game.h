@@ -29,6 +29,8 @@ public:
 
   void update();
 
+  void restart();
+
   void restartBall();
   
   void movePlayer(MovePlayerCommand command);
@@ -40,11 +42,16 @@ public:
   void render();
 
 private:
+  void handleEvent();
+
+  void showWinner();
+
   std::string title = "Pong";
   sf::RenderWindow* window;
   const float windowHeight = 560;
   const float windowWidth = 720;
   bool gameEnded = false;
+  bool playerWantsToQuit = false;
 
   Ball ball;
   Player player1;
@@ -61,10 +68,14 @@ private:
   sf::SoundBuffer loseSoundBuffer;
   sf::Sound sound;
 
+  sf::Font font;
+  sf::Text winnerText;
+  sf::Text whatToDoNextText;
+
   sf::Clock timerForBallToRestart;
 
   /**
-   * Estados:
+   * Estados/cenas:
    *    tela inicial: bola batendo nas paredes,
    *      jogadores invisíveis, ou menu
    *    jogo normal
@@ -92,6 +103,9 @@ private:
   void initBall();
   void initPlayers();
   void initSounds();
+  void initFont();
+  void initTexts();
+  void updateText();
 };
 
 

@@ -10,13 +10,13 @@
 class Ball {
 public:
   float radius = 10;
-  float stepsPerSecond = 2*360;
+  float stepsPerSecond = 1.5*360.0;
   float x;
   float y;
   float direction; // Em graus
   float directionInRadians;
-  const float degreesToRadians = M_PI/180;
-  const float radiansToDegrees = 180/M_PI;
+  const float degreesToRadians = M_PI/180.0;
+  const float radiansToDegrees = 180.0/M_PI;
   bool canMove = false;
 
   Ball();

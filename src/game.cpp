@@ -6,6 +6,8 @@ Game::Game(sf::RenderWindow* w) {
 
   timerForBallToRestart = sf::Clock(); // colocar dentro de initClocks()?
 
+  initFont();
+  initTexts();
   initSounds();
   initWindow(w);
   initScoreboard();
@@ -18,39 +20,89 @@ Game::~Game() {}
 
 
 bool Game::isRunning() {
-  return !aPlayerReachedMaxScore && !gameEnded;
+  // return !aPlayerReachedMaxScore && !gameEnded;
+  return !playerWantsToQuit;
 }
 
 
-void Game::end() {
-  gameEnded = true;
+
+void Game::handleEvent() {
+  sf::Event event;
+  while (window->pollEvent(event)) {
+    if (event.type == sf::Event::Closed) {
+      playerWantsToQuit = true;
+      window->close();
+    }
+    if (event.type == sf::Event::KeyReleased) {
+      if (event.key.code == sf::Keyboard::Space) {
+        this->restart();
+      }
+    }
+  }
+
+
+
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+    playerWantsToQuit = true;
+    window->close();
+  }
+
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+    this->movePlayer({"", 1, true});
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+    this->movePlayer({"", 1, false});
+    
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+    this->movePlayer({"", 2, true});
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+    this->movePlayer({"", 2, false});
 }
 
 
 void Game::update() {
-  if (!isRunning()) {
-    window->close();
-    return;
-  }
-  
-  if (player1Score == maxScore || player2Score == maxScore) {
-    aPlayerReachedMaxScore = true; 
-    // TODO:
-    // present winner
-    // push key to restart
-    // push another key to quit game
-  }
+  this->handleEvent();
 
-  if (!ball.canMove && timerForBallToRestart.getElapsedTime().asSeconds() > 1) {
-    restartBall();
-  }
+  updateText();
 
   moveBall();
   scoreboard->update();
   ball.update();
   player1.update();
   player2.update();
+
+  aPlayerReachedMaxScore = player1Score == maxScore || player2Score == maxScore;
+  if (aPlayerReachedMaxScore) {
+    showWinner();
+    return;
+  }
+
+  if (!ball.canMove && timerForBallToRestart.getElapsedTime().asSeconds() > 1) {
+    restartBall();
+  }
 }
+
+
+void Game::restart() {
+  if (!aPlayerReachedMaxScore) {
+    return;
+  }
+  restartBall();
+  initPlayers();
+  winnerText.setString("");
+  whatToDoNextText.setString("");
+  scoreboard->reset();
+}
+
+
+void Game::showWinner() {
+  uint8_t winnerId = player1Score > player2Score ? 1 : 2; 
+  std::string winner = "PLAYER " + std::to_string(winnerId) + "\n\tWINS";
+  winnerText.setString(winner);
+  whatToDoNextText.setString(
+    "press <SPACE> to restart game\n"
+    "press <ESC>    to quit game");
+}
+
 
 
 void Game::restartBall() {
@@ -168,6 +220,8 @@ void Game::render() {
   player1.render(window);
   player2.render(window);
   ball.render(window);
+  window->draw(winnerText);
+  window->draw(whatToDoNextText);
   window->display();
   LastFrameClock::restart();
 }
@@ -222,4 +276,39 @@ void Game::initSounds() {
     throw std::runtime_error("could not load file: player-hit.wav");
   if (!loseSoundBuffer.loadFromFile("../rsc/lose.wav"))
     throw std::runtime_error("could not load file: lose.wav");
+}
+
+
+void Game::initFont() {
+  if (!font.loadFromFile("../rsc/bit5x5.ttf"))
+    throw std::runtime_error("game::initFont could not load font");
+}
+
+
+void Game::initTexts() {
+  winnerText = sf::Text("", font);
+  winnerText.setCharacterSize(64);
+  winnerText.setFillColor(sf::Color::White);
+  winnerText.setPosition(windowWidth/2, windowHeight/2);
+
+  whatToDoNextText = sf::Text("", font);
+  whatToDoNextText.setCharacterSize(16);
+  whatToDoNextText.setFillColor(sf::Color::White);
+  whatToDoNextText.setPosition(
+    // windowWidth/2, 
+    winnerText.getPosition().x,
+    windowHeight/2+64+2*16+8
+  );
+}
+
+
+void Game::updateText() {
+  winnerText.setOrigin(
+    winnerText.getLocalBounds().width/2,
+    winnerText.getLocalBounds().height/2
+  );
+  whatToDoNextText.setOrigin(
+    whatToDoNextText.getLocalBounds().width/2,
+    whatToDoNextText.getLocalBounds().height/2
+  );
 }
