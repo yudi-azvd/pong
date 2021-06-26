@@ -3,45 +3,45 @@
 
 #include <stdint.h>
 #include <SFML/Graphics.hpp>
+#include <SFML/Graphics/Text.hpp>
 
 
 class Scoreboard {
-public:
-  float x, y;
-  float width, height;
-  uint8_t* player1Points = 0;
-  uint8_t* player2Points = 0;
-  bool visible = false;
+public:  
+  Scoreboard();
   
-  Scoreboard() { }
+  ~Scoreboard();
 
-  Scoreboard(uint8_t* p1Score, uint8_t* p2Score) {
-    player1Points = p1Score;
-    player2Points = p2Score;
-  }
+  Scoreboard(uint8_t* p1Score, uint8_t* p2Score);
 
   std::string getScore() {
     return "score: " + std::to_string(*player1Points) + " x " + std::to_string(*player2Points);
   }
 
-  void setVisible(bool visible=true) {
-    this->visible = visible;
-  }
-
-  void setPostion(float x, float y) {
-    this->x = x;
-    this->y = y;
-  }
+  void setPosition(float x, float y);
 
   void setSize(float w, float h) {
     width = w;
     height = h;
   }
 
+  void update();
+
+  void render(sf::RenderWindow* target);
+
 private:
-  // void render() {
-  //   std::printf("%d x %d\n", player1Points, player2Points);
-  // }
+  float x, y;
+  float width, height;
+  uint8_t* player1Points = 0;
+  uint8_t* player2Points = 0;
+  bool visible = false;
+
+  sf::Text* text;
+  sf::Font font;
+  sf::RectangleShape rect;
+
+  void initFonts();
+  void initText();
 };
 
 

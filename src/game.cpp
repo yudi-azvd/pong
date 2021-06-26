@@ -8,7 +8,7 @@ Game::Game(sf::RenderWindow* w) {
 
   initSounds();
   initWindow(w);
-  initScore();
+  initScoreboard();
   initBall();
   initPlayers();
 }
@@ -46,6 +46,7 @@ void Game::update() {
   }
 
   moveBall();
+  scoreboard->update();
   ball.update();
   player1.update();
   player2.update();
@@ -91,10 +92,9 @@ void Game::moveBall() {
   if (isAlmostTouchingRightWall && dx > 0) {
     sound.setBuffer(loseSoundBuffer); sound.play();
     timerForBallToRestart.restart();
-    sound.setBuffer(loseSoundBuffer); sound.play();
     ball.canMove = false;
-    ++player1Score;
     ball.bounce("left");
+    ++player1Score;
     return;
   }
 
@@ -103,8 +103,8 @@ void Game::moveBall() {
     sound.setBuffer(loseSoundBuffer); sound.play();
     timerForBallToRestart.restart();
     ball.canMove = false;
-    ++player2Score;
     ball.bounce("right");
+    ++player2Score;
     return;
   }
 
@@ -164,6 +164,7 @@ bool Game::isBallTouchingPlayer(uint8_t playerId) {
 
 void Game::render() {
   window->clear();
+  scoreboard->render(window);
   player1.render(window);
   player2.render(window);
   ball.render(window);
@@ -180,16 +181,6 @@ float Game::randomDirectionForBall() {
 }
 
 
-void Game::initSounds() {
-  if (!wallHitSoundBuffer.loadFromFile("../rsc/wall-hit.wav"))
-    throw std::runtime_error("could not load file: wall-hit.wav");
-  if (!playerHitSoundBuffer.loadFromFile("../rsc/player-hit.wav"))
-    throw std::runtime_error("could not load file: player-hit.wav");
-  if (!loseSoundBuffer.loadFromFile("../rsc/lose.wav"))
-    throw std::runtime_error("could not load file: lose.wav");
-}
-
-
 void Game::initWindow(sf::RenderWindow* w) {
   window = w;
   window->create(
@@ -200,9 +191,10 @@ void Game::initWindow(sf::RenderWindow* w) {
 }
 
 
-void Game::initScore() {
+void Game::initScoreboard() {
+  scoreboard = new Scoreboard(&player1Score, &player2Score);
+  scoreboard->setPosition(windowWidth/2, 80);  
   resetScore();
-  scoreboard = Scoreboard(&player1Score, &player2Score);
 }
 
 
@@ -220,4 +212,14 @@ void Game::initPlayers() {
   player2.id = 2;
   player2.x = windowWidth - sideOffset;
   player2.y = windowHeight/2;
+}
+
+
+void Game::initSounds() {
+  if (!wallHitSoundBuffer.loadFromFile("../rsc/wall-hit.wav"))
+    throw std::runtime_error("could not load file: wall-hit.wav");
+  if (!playerHitSoundBuffer.loadFromFile("../rsc/player-hit.wav"))
+    throw std::runtime_error("could not load file: player-hit.wav");
+  if (!loseSoundBuffer.loadFromFile("../rsc/lose.wav"))
+    throw std::runtime_error("could not load file: lose.wav");
 }

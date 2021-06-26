@@ -74,7 +74,7 @@ private:
    *      - apertar ESC pra sair
    */
 
-  Scoreboard scoreboard;
+  Scoreboard* scoreboard;
 
   const float sideOffset = 40;
 
@@ -87,11 +87,11 @@ private:
     player2Score = 0;
   }
 
-  void initSounds();
   void initWindow(sf::RenderWindow* w);
-  void initScore();
+  void initScoreboard();
   void initBall();
   void initPlayers();
+  void initSounds();
 };
 
 
