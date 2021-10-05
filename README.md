@@ -12,7 +12,7 @@
 
 
 ## Baixar, compilar e jogar
-    git clone https://github.com/yudi-azvd/pong
+    git clone https://github.com/yudi-azvd/pong.git
     cd pong/build
     cmake ..
     make
