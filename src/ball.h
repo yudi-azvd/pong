@@ -9,8 +9,9 @@
 
 class Ball {
 public:
-  float radius = 10;
+  float size = 20;
   float stepsPerSecond = 1.5*360.0;
+  // float stepsPerSecond = 1.5*360.0/8;
   float x;
   float y;
   float direction; // Em graus
@@ -34,7 +35,8 @@ public:
   void render(sf::RenderTarget* target);
 
 private:
-  sf::CircleShape circle;
+  sf::RectangleShape shape;
+  sf::RectangleShape center;
 };
 
 

@@ -38,9 +38,18 @@ void Game::handleEvent() {
         this->restart();
       }
     }
+
+    if (debugBallMode) {
+      if (event.type == sf::Event::MouseMoved) {
+        ball.x = event.mouseMove.x;
+        ball.y = event.mouseMove.y;
+      }
+    }
+    if (event.type == sf::Event::KeyReleased) {
+      if (event.key.code == sf::Keyboard::LControl)
+        debugBallMode = !debugBallMode;
+    }
   }
-
-
 
   if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
     playerWantsToQuit = true;
@@ -126,53 +135,58 @@ void Game::moveBall() {
   float dy = sin(rad)*ball.stepsPerSecond;
   float ballMinDistance = 5;
 
-  bool isAlmostTouchingCeiling = ball.y-ball.radius/2 <= ballMinDistance;
+  bool isAlmostTouchingCeiling = ball.y <= ballMinDistance;
   if (isAlmostTouchingCeiling && dy < 0) {
     sound.setBuffer(wallHitSoundBuffer); sound.play();
     ball.bounce("down");
     return;
   }
 
-  bool isAlmostTouchingFloor = windowHeight - (ball.y+ballMinDistance/2) <= ballMinDistance;
+  bool isAlmostTouchingFloor = ball.y + ballMinDistance >= windowHeight;
   if (isAlmostTouchingFloor && dy > 0) {
     sound.setBuffer(wallHitSoundBuffer); sound.play();
     ball.bounce("up");
     return;
   }
 
-  bool isAlmostTouchingRightWall = windowWidth - (ball.x+ballMinDistance/2) <= ballMinDistance;
-  if (isAlmostTouchingRightWall && dx > 0) {
+  bool isAlmostTouchingRightWall = ball.x + ballMinDistance >= windowWidth;
+  if (isAlmostTouchingRightWall) {
     sound.setBuffer(loseSoundBuffer); sound.play();
     timerForBallToRestart.restart();
     ball.canMove = false;
-    ball.bounce("left");
     ++player1Score;
     return;
   }
 
-  bool isAlmostTouchingLeftWall = ball.x-ballMinDistance/2 <= ballMinDistance;
-  if (isAlmostTouchingLeftWall && dx < 0) {
+  bool isAlmostTouchingLeftWall = ball.x < ballMinDistance;
+  if (isAlmostTouchingLeftWall) {
     sound.setBuffer(loseSoundBuffer); sound.play();
     timerForBallToRestart.restart();
     ball.canMove = false;
-    ball.bounce("right");
     ++player2Score;
     return;
   }
 
+  BallOnPlayerCollision collision{false, 0};
   // TODO: a nova direção da boladeve depender de onde ela tocou no jogador.
-  if (isBallTouchingPlayer(1)) {
+  if (isBallTouchingPlayer(1, collision)) {
     sound.setBuffer(playerHitSoundBuffer); sound.play();
-    ball.bounce("right"); // tanto faz direita ou esquerda
-  }
 
-  // TODO: a nova direção da boladeve depender de onde ela tocou no jogador.
-  if (isBallTouchingPlayer(2)) {
-    sound.setBuffer(playerHitSoundBuffer); sound.play();
+    ball.x += ball.size/2;
     ball.bounce("left"); // tanto faz direita ou esquerda
   }
 
-  ball.move();
+  // TODO: a nova direção da boladeve depender de onde ela tocou no jogador.
+  if (isBallTouchingPlayer(2, collision)) {
+    sound.setBuffer(playerHitSoundBuffer); sound.play();
+
+    ball.x -= ball.size/2;
+    // ball.x = ball.x - ball.size/2;
+    ball.bounce("left"); // tanto faz direita ou esquerda
+  }
+
+  if (!debugBallMode)
+    ball.move();
 }
 
 
@@ -197,19 +211,30 @@ void Game::movePlayer(MovePlayerCommand command) {
 }
 
 
-bool Game::isBallTouchingPlayer(uint8_t playerId) {
+bool Game::isBallTouchingPlayer(uint8_t playerId, BallOnPlayerCollision& coll) {
   Player& p = playerId == 1 ? player1 : player2;
   float px = p.x;
   float py = p.y;
   float pwidth = p.width;
   float pheight = p.height;
-  float x = ball.x;
-  float y = ball.y;
+  float playerRatio = pheight/pwidth;
+  float playerWallX = px + (playerId == 1 
+    ? +pwidth/2
+    : -pwidth/2);
 
-  float horizontalCentersDistance = std::abs(px-x);
-  float verticalCentersDistance = std::abs(py-y);
-  bool areTouchingHorizontally = ball.radius + pwidth/2 >= horizontalCentersDistance; 
-  bool areTouchingVertically = ball.radius + pheight/2 >= verticalCentersDistance;
+  float verticalCentersDistance = std::abs(py-ball.y);
+  bool areTouchingHorizontally = std::abs(playerWallX-ball.x) <= ball.size/2; 
+  bool areTouchingVertically = ball.size/2 + pheight/2 >= verticalCentersDistance;
+
+  if (areTouchingHorizontally && areTouchingVertically) {
+    std::printf("#############################################\n");
+    std::printf("             ball half size: %.2f\n", ball.size/2);
+    std::printf("                     ball x: %.2f\n", ball.x);
+    std::printf("           player left wall: %.2f\n", playerWallX);
+    std::printf("ball x and player left wall: %.2f\n", playerWallX - ball.x);
+    std::printf("ball x and player left wall: %.2f\n", std::abs(playerWallX - ball.x));
+  }
+
   return areTouchingHorizontally && areTouchingVertically;
 }
 

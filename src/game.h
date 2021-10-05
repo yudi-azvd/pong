@@ -10,6 +10,7 @@
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 
+#include "ballonplayercollision.h"
 #include "player.h"
 #include "ball.h"
 #include "scoreboard.h"
@@ -54,6 +55,7 @@ private:
   bool playerWantsToQuit = false;
 
   Ball ball;
+  bool debugBallMode = false;
   Player player1;
   Player player2;
   bool playersCanMove = false;
@@ -91,7 +93,7 @@ private:
 
   float randomDirectionForBall();
 
-  bool isBallTouchingPlayer(uint8_t playerId);
+  bool isBallTouchingPlayer(uint8_t playerId, BallOnPlayerCollision&);
 
   void resetScore() {
     player1Score = 0;

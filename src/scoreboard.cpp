@@ -43,11 +43,10 @@ void Scoreboard::initFonts() {
 
 void Scoreboard::initText() {
   text = new sf::Text("SCOREBOARD", font);
-  text->setCharacterSize(48);
+  text->setCharacterSize(52);
   text->setFillColor(sf::Color::White);
   text->setStyle(sf::Text::Regular);
   text->setPosition(x, y);
-  text->setScale(1, 1.5);
   text->setOrigin({
     text->getLocalBounds().width/4, // deveria ser /2 pra centralizar, mas /4 que funciona
     text->getLocalBounds().height/4,

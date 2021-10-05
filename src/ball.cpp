@@ -3,9 +3,12 @@
 
 Ball::Ball() {
   direction = 0;
-  circle.setRadius(radius);
-  circle.setFillColor(sf::Color::White);
-  circle.setOrigin(radius, radius);
+  shape.setSize({size, size});
+  shape.setFillColor(sf::Color::White);
+  shape.setOrigin(size/2, size/2);
+  center.setFillColor(sf::Color::Red);
+  center.setSize({2, 2});
+  center.setOrigin(2, 2);
 }
 
 
@@ -44,10 +47,12 @@ void Ball::bounce(std::string newDirection) {
 
 
 void Ball::update() {
-  circle.setPosition(x, y);
+  shape.setPosition(x, y);
+  // center.setPosition(x, y);
 }
 
 
 void Ball::render(sf::RenderTarget* target) {
-  target->draw(circle);
+  target->draw(shape);
+  // target->draw(center);
 }
