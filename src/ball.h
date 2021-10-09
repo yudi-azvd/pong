@@ -18,7 +18,6 @@ public:
   float directionInRadians;
   const float degreesToRadians = M_PI/180.0;
   const float radiansToDegrees = 180.0/M_PI;
-  bool canMove = false;
 
   Ball();
 

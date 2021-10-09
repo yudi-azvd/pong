@@ -21,9 +21,6 @@ void Ball::setDirection(float dir) {
 
 
 void Ball::move() {
-  if (!canMove)
-    return;
-
   double dt = LastFrameClock::getDeltaTime();
   directionInRadians = direction*degreesToRadians;
   x += stepsPerSecond*cos(directionInRadians)*dt;

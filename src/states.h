@@ -1,0 +1,11 @@
+#ifndef STATES_H_INCLUDED
+#define STATES_H_INCLUDED
+
+enum State {
+  BALL_WAIT,
+  PAUSED,
+  NORMAL_GAME,
+  SHOW_WINNER,
+};  
+
+#endif // STATES_H_INCLUDED

@@ -16,6 +16,7 @@
 #include "scoreboard.h"
 #include "command.h"
 #include "lastframeclock.h"
+#include "states.h"
 
 
 class Game {
@@ -48,6 +49,7 @@ private:
   void showWinner();
 
   std::string title = "Pong";
+  State state = State::BALL_WAIT;
   sf::RenderWindow* window;
   const float windowHeight = 560;
   const float windowWidth = 720;
@@ -55,6 +57,7 @@ private:
   bool playerWantsToQuit = false;
 
   Ball ball;
+  int wait = 1;
   bool debugBallMode = false;
   Player player1;
   Player player2;
@@ -74,7 +77,7 @@ private:
   sf::Text winnerText;
   sf::Text whatToDoNextText;
 
-  sf::Clock timerForBallToRestart;
+  sf::Clock timerForBallToMove;
 
   /**
    * Estados/cenas:
